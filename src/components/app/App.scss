@@ -1,0 +1,116 @@
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  background: linear-gradient(
+    30deg,
+    rgba(95, 14, 111, 1) 20%,
+    rgba(64, 132, 212, 1) 100%
+  );
+  header {
+    border-bottom: 1px solid lightgray;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 25px;
+    box-shadow: 0px 8px 33px -6px lightgray;
+    .logo {
+      font-size: 35px;
+      color: lightgray;
+    }
+    .head-title {
+      font-size: 25px;
+      color: lightgray;
+    }
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      &__acc {
+        font-size: 20px;
+        color: lightgray;
+      }
+      svg {
+        cursor: pointer;
+        &:hover {
+          path:nth-child(n) {
+            fill: white;
+          }
+        }
+      }
+    }
+  }
+}
+main {
+  max-width: 1024px;
+
+  margin: 0 auto;
+  padding: 50px;
+  .main-title {
+    text-align: center;
+    font-size: 40px;
+    color: lightgray;
+  }
+  .train__container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    margin-top: 50px;
+    padding: 20px;
+    border: 2px solid lightgray;
+    border-radius: 15px;
+  }
+}
+
+.login__container {
+  padding-top: 20vh;
+  display: flex;
+  justify-content: center;
+  .login__content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    .login__title {
+      font-size: 30px;
+      color: lightgray;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 5px;
+
+      font-size: 18px;
+
+      text-align: center;
+
+      border: 1px solid lightgray;
+      border-radius: 5px;
+
+      outline: none;
+
+      margin-bottom: 12px;
+    }
+    button {
+      cursor: pointer;
+      border: 1px solid lightgray;
+      border-radius: 5px;
+
+      background-color: transparent;
+
+      color: rgba(211, 211, 211, 0.9);
+
+      padding: 5px 15px;
+      font-size: 20px;
+      transition: all 0.1s linear;
+      &:hover {
+        transform: scale(1.05);
+        color: rgba(211, 211, 211, 1);
+      }
+    }
+  }
+}

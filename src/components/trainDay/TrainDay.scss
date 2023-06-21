@@ -1,0 +1,51 @@
+.train {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 15px;
+
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  &:hover {
+    border: 1px solid white;
+    svg {
+      margin-right: 0;
+      path:nth-child(n) {
+        fill: white;
+      }
+    }
+    .train__text {
+      color: white;
+    }
+  }
+  &-add {
+    border: 1px solid rgba(211, 211, 211, 0.4);
+    svg {
+      path:nth-child(n) {
+        fill: rgba(211, 211, 211, 0.4);
+      }
+    }
+  }
+  &__text {
+    font-size: 25px;
+    color: lightgray;
+    margin-left: 20px;
+    &-add {
+      color: rgba(211, 211, 211, 0.4);
+    }
+  }
+  svg {
+    margin-right: 100px;
+    transition: margin-right 0.3s ease-in;
+  }
+}
+.trains {
+  margin: 0 50px;
+
+  border: 1px dashed lightgray;
+  border-top: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
