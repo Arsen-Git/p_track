@@ -1,17 +1,49 @@
 import "./App.scss";
 
-import TrainDay from "../trainDay/TrainDay";
-
 import { useState, useEffect } from "react";
 
 import axios from "axios";
+import TrainDay from "../trainDay/TrainDay";
 
 function App() {
   const [userData, setUserData] = useState({});
+  const [newDayName, setNewDayName] = useState("");
 
-  const onExit = () => {
+  const onLogout = () => {
     localStorage.removeItem("user");
     setUserData(null);
+  };
+
+  const onInputChange = (e) => {
+    setNewDayName(e.target.value);
+  };
+
+  const onAddDay = (event) => {
+    event.preventDefault();
+    if (newDayName === "") {
+      setNewDayName("Не може бути пустим!");
+    } else {
+      setUserData({
+        name: userData.name,
+        trains: [...userData.trains, { name: newDayName, excersizes: [] }],
+      });
+      axios.put(
+        `https://6363becf37f2167d6f8223de.mockapi.io/data/${userData.id}`,
+        {
+          name: userData.name,
+          trains: [...userData.trains, { name: newDayName, excersizes: [] }],
+        }
+      );
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: userData.name,
+          trains: [...userData.trains, { name: newDayName, excersizes: [] }],
+        })
+      );
+
+      setNewDayName("");
+    }
   };
 
   useEffect(() => {
@@ -29,7 +61,7 @@ function App() {
             <div className="user">
               <h2 className="user__acc">{userData.name} /</h2>
               <svg
-                onClick={onExit}
+                onClick={onLogout}
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -53,6 +85,17 @@ function App() {
               {userData.trains?.map((train, index) => (
                 <TrainDay key={index} train={train} />
               ))}
+              <form className="train__form">
+                <input
+                  onChange={onInputChange}
+                  type="text"
+                  value={newDayName}
+                  placeholder="Назва тренінгу"
+                />
+                <button onClick={onAddDay} type="submit">
+                  Додати новий день
+                </button>
+              </form>
             </div>
           </main>
         </>

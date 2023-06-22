@@ -16,7 +16,7 @@ export default function TrainDay({ train }) {
         </svg>
       </summary>
       <div className="trains">
-        {train.excersizes.map((ex, index) => (
+        {train.excersizes?.map((ex, index) => (
           <Train
             key={index}
             name={ex.name}

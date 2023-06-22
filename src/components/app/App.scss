@@ -61,6 +61,37 @@ main {
     padding: 20px;
     border: 2px solid lightgray;
     border-radius: 15px;
+    .train__form {
+      border: 1px solid darkgray;
+      border-radius: 5px;
+
+      padding: 10px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      input,
+      button {
+        padding: 5px;
+        background-color: transparent;
+
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        outline: none;
+        color: lightgray;
+
+        font-size: 15px;
+        text-align: center;
+      }
+      button {
+        cursor: pointer;
+        transition: all 0.1s linear;
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
   }
 }
 
