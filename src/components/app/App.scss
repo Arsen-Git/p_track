@@ -18,10 +18,16 @@
     .logo {
       font-size: 35px;
       color: lightgray;
+      @media screen and (max-width: 500px) {
+        font-size: 22px;
+      }
     }
     .head-title {
       font-size: 25px;
       color: lightgray;
+      @media screen and (max-width: 500px) {
+        display: none;
+      }
     }
     .user {
       display: flex;
@@ -47,10 +53,16 @@ main {
 
   margin: 0 auto;
   padding: 50px;
+  @media screen and (max-width: 500px) {
+    padding: 30px;
+  }
   .main-title {
     text-align: center;
     font-size: 40px;
     color: lightgray;
+    @media screen and (max-width: 500px) {
+      font-size: 35px;
+    }
   }
   .train__container {
     display: flex;
@@ -61,6 +73,10 @@ main {
     padding: 20px;
     border: 2px solid lightgray;
     border-radius: 15px;
+    @media screen and (max-width: 500px) {
+      margin-top: 20px;
+      padding: 10px;
+    }
     .train__form {
       border: 1px solid darkgray;
       border-radius: 5px;
@@ -71,6 +87,10 @@ main {
       justify-content: center;
       align-items: center;
       gap: 20px;
+      @media screen and (max-width: 500px) {
+        flex-direction: column;
+        gap: 10px;
+      }
       input,
       button {
         padding: 5px;
@@ -83,6 +103,11 @@ main {
 
         font-size: 15px;
         text-align: center;
+      }
+      input {
+        @media screen and (max-width: 500px) {
+          width: 100%;
+        }
       }
       button {
         cursor: pointer;

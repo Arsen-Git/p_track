@@ -2,16 +2,73 @@ import "./App.scss";
 
 import { useState, useEffect } from "react";
 
-import axios from "axios";
 import TrainDay from "../trainDay/TrainDay";
+
+import { Api } from "../../utils/api";
+import Timer from "../timer/Timer";
 
 function App() {
   const [userData, setUserData] = useState({});
   const [newDayName, setNewDayName] = useState("");
 
+  const { getData, putData } = Api();
+
   const onLogout = () => {
     localStorage.removeItem("user");
     setUserData(null);
+  };
+
+  const onDeleteDay = (dayName) => {
+    const newArray = userData.trains.filter((day) => day.name !== dayName);
+    putTrainsData(newArray);
+  };
+
+  const onDeleteTrain = (trainName, trainChild) => {
+    const newDays = userData.trains.map((day) => {
+      if (day.name === trainChild) {
+        const newTrains = day.excersizes.filter(
+          (exc) => exc.name !== trainName
+        );
+        return { name: day.name, excersizes: newTrains };
+      }
+      return day;
+    });
+    putTrainsData(newDays);
+  };
+
+  const onUpdateTrain = (exc) => {
+    const newTrains = userData.trains.map((day) => {
+      if (day.name === exc.child) {
+        const newExcersizes = day.excersizes.map((e) => {
+          if (e.name === exc.name) {
+            return exc;
+          }
+          return e;
+        });
+        return { name: day.name, excersizes: newExcersizes };
+      }
+      return day;
+    });
+    putTrainsData(newTrains);
+  };
+
+  const putTrainsData = (data) => {
+    const newObj = {
+      id: userData.id,
+      name: userData.name,
+      trains: data,
+    };
+    setUserData(newObj);
+    putData(userData.id, newObj);
+  };
+
+  const fetchingData = async (name) => {
+    const response = await getData(name);
+    dataFetched(response[0]);
+  };
+
+  const dataFetched = (data) => {
+    setUserData(data);
   };
 
   const onInputChange = (e) => {
@@ -22,33 +79,47 @@ function App() {
     event.preventDefault();
     if (newDayName === "") {
       setNewDayName("Не може бути пустим!");
-    } else {
+    } else if (
+      userData.trains.filter((day) => day.name === newDayName).length === 0
+    ) {
       setUserData({
+        id: userData.id,
         name: userData.name,
-        trains: [...userData.trains, { name: newDayName, excersizes: [] }],
+        trains: [
+          ...userData.trains,
+          { child: newDayName, name: newDayName, excersizes: [] },
+        ],
       });
-      axios.put(
-        `https://6363becf37f2167d6f8223de.mockapi.io/data/${userData.id}`,
-        {
-          name: userData.name,
-          trains: [...userData.trains, { name: newDayName, excersizes: [] }],
-        }
-      );
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          name: userData.name,
-          trains: [...userData.trains, { name: newDayName, excersizes: [] }],
-        })
-      );
+
+      putData(userData.id, {
+        id: userData.id,
+        name: userData.name,
+        trains: [
+          ...userData.trains,
+          { child: newDayName, name: newDayName, excersizes: [] },
+        ],
+      });
 
       setNewDayName("");
+    } else {
+      setNewDayName("Вже є!");
     }
   };
 
+  const onAddTrain = (day) => {
+    const newDays = userData.trains.map((d) => {
+      if (d.name === day.name) {
+        return day;
+      }
+      return d;
+    });
+    putTrainsData(newDays);
+  };
+
   useEffect(() => {
-    setUserData(JSON.parse(localStorage.getItem("user")));
+    fetchingData(JSON.parse(localStorage.getItem("user")));
   }, []);
+
   return (
     <div className="wrapper">
       {userData ? (
@@ -83,21 +154,27 @@ function App() {
             <h1 className="main-title">Що потренуємо сьогодні?</h1>
             <div className="train__container">
               {userData.trains?.map((train, index) => (
-                <TrainDay key={index} train={train} />
+                <TrainDay
+                  key={index}
+                  train={train}
+                  onAddTrain={onAddTrain}
+                  onDelete={onDeleteDay}
+                  onUpdateTrain={onUpdateTrain}
+                  onDeleteTrain={onDeleteTrain}
+                />
               ))}
-              <form className="train__form">
+              <div className="train__form">
                 <input
                   onChange={onInputChange}
                   type="text"
                   value={newDayName}
                   placeholder="Назва тренінгу"
                 />
-                <button onClick={onAddDay} type="submit">
-                  Додати новий день
-                </button>
-              </form>
+                <button onClick={onAddDay}>Додати новий день</button>
+              </div>
             </div>
           </main>
+          <Timer />
         </>
       ) : (
         <LoginModal onLogin={setUserData} />
@@ -106,26 +183,23 @@ function App() {
   );
 }
 
-function LoginModal({ onLogin }) {
+const LoginModal = ({ onLogin }) => {
   const [inputValue, setInputValue] = useState("");
+
+  const { getData } = Api();
 
   const onInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
-  const onLoginClick = () => {
-    axios
-      .get("https://6363becf37f2167d6f8223de.mockapi.io/data")
-      .then((data) => {
-        const filteredData = data.data.filter(
-          (user) => user.name === inputValue
-        );
-        const user = filteredData.length > 0 ? filteredData[0] : null;
-        if (user) {
-          onLogin(user);
-          localStorage.setItem("user", JSON.stringify(user));
-        }
-      });
+  const onLoginClick = async (e) => {
+    const response = await getData(inputValue);
+    if (response.length > 0) {
+      onLogin(response[0]);
+      localStorage.setItem("user", JSON.stringify(response[0].name));
+    } else {
+      e.target.textContent = "Спробувати ще раз?";
+    }
   };
 
   return (
@@ -137,6 +211,6 @@ function LoginModal({ onLogin }) {
       </div>
     </div>
   );
-}
+};
 
 export default App;

@@ -1,10 +1,48 @@
 import Train from "../train/Train";
 import "./TrainDay.scss";
 
-export default function TrainDay({ train }) {
+import { useState } from "react";
+
+export default function TrainDay({
+  train,
+  onAddTrain,
+  onDelete,
+  onDeleteTrain,
+  onUpdateTrain,
+}) {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleDelete = () => {
+    onDelete(train.name);
+  };
+
+  const onInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const addTrain = () => {
+    if (inputValue === "") {
+      setInputValue("А як же назва?");
+    } else if (
+      train.excersizes.filter((exc) => exc.name === inputValue).length === 0
+    ) {
+      train.excersizes.push({
+        child: train.name,
+        name: inputValue,
+        sets: "0",
+        reps: "0",
+        weight: "0",
+      });
+      onAddTrain(train);
+    }
+  };
+
   return (
     <details>
       <summary className="train">
+        <button onClick={handleDelete} className="train__delete">
+          X
+        </button>
         <h2 className="train__text">{train.name}</h2>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -19,14 +57,25 @@ export default function TrainDay({ train }) {
         {train.excersizes?.map((ex, index) => (
           <Train
             key={index}
+            child={ex.child}
             name={ex.name}
             sets={ex.sets}
             reps={ex.reps}
             weights={ex.weight}
             train={train}
+            onUpdateTrain={onUpdateTrain}
+            onDeleteTrain={onDeleteTrain}
           />
         ))}
-        <button>Підлити масла в вогонь...</button>
+        <div className="train__form">
+          <input
+            onChange={onInputChange}
+            type="text"
+            value={inputValue}
+            placeholder="Назва вправи"
+          />
+          <button onClick={addTrain}>Додати нову вправу</button>
+        </div>
       </div>
     </details>
   );

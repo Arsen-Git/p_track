@@ -1,9 +1,13 @@
 .element {
   display: flex;
   align-items: center;
-  gap: 80px;
+  justify-content: space-between;
 
   padding: 10px;
+
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+  }
 
   &:not(:last-child) {
     border-bottom: 1px solid lightgray;
@@ -15,10 +19,20 @@
     font-size: 25px;
 
     color: lightgray;
+    @media screen and (max-width: 500px) {
+      margin: 15px 0;
+      text-align: center;
+      width: 100%;
+      font-size: 20px;
+    }
   }
   &__settings {
     display: flex;
     gap: 10px;
+    @media screen and (max-width: 500px) {
+      gap: 25px;
+      margin-bottom: 10px;
+    }
     .setting {
       display: flex;
       flex-direction: column;
@@ -36,15 +50,18 @@
         outline: none;
 
         font-size: 20px;
+        @media screen and (max-width: 500px) {
+          width: 100%;
+          font-size: 20px;
+        }
       }
       p {
         color: lightgray;
       }
     }
   }
-  button {
+  .element__update {
     cursor: pointer;
-    margin-left: 50px;
     padding: 10px 25px;
 
     border: 1px solid lightgray;
@@ -54,8 +71,42 @@
     color: lightgray;
 
     font-size: 20px;
+    @media screen and (max-width: 500px) {
+      font-size: 18px;
+    }
     &:hover {
       transform: scale(1.02);
     }
+  }
+}
+
+.animated-done {
+  animation: done 0.7s linear;
+}
+.animated-reject {
+  animation: reject 0.7s linear;
+}
+
+@keyframes done {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: lightgreen;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes reject {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: lightcoral;
+  }
+  100% {
+    background-color: transparent;
   }
 }

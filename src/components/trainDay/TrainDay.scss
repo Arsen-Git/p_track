@@ -32,6 +32,9 @@
     font-size: 25px;
     color: lightgray;
     margin-left: 20px;
+    @media screen and (max-width: 500px) {
+      font-size: 18px;
+    }
     &-add {
       color: rgba(211, 211, 211, 0.4);
     }
@@ -39,6 +42,19 @@
   svg {
     margin-right: 100px;
     transition: margin-right 0.3s ease-in;
+    @media screen and (max-width: 500px) {
+      margin-right: 20px;
+    }
+  }
+  &__delete {
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    color: lightgray;
+    &:hover {
+      background-color: red;
+    }
   }
 }
 .trains {
